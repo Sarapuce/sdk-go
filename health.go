@@ -28,7 +28,7 @@ func (c *Client) Health(ctx context.Context) (*HealthInfo, error) {
 	if err != nil {
 		return nil, opErr("health", "request failed", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
