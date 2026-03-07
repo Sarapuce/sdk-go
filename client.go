@@ -23,37 +23,52 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"sync"
 
 	gql "github.com/Khan/genqlient/graphql"
 )
+
+// TokenRefreshFunc is called before each request when set.
+// It should return a valid access token or an error.
+type TokenRefreshFunc func(ctx context.Context) (string, error)
 
 // Client is the main Caido SDK client.
 // It exposes domain-specific SDKs as fields, mirroring the JS SDK pattern.
 type Client struct {
 	// Domain SDKs
-	Requests    *RequestSDK
-	Replay      *ReplaySDK
-	Findings    *FindingSDK
-	Scopes      *ScopeSDK
-	Projects    *ProjectSDK
+	Requests     *RequestSDK
+	Replay       *ReplaySDK
+	Findings     *FindingSDK
+	Scopes       *ScopeSDK
+	Projects     *ProjectSDK
 	Environments *EnvironmentSDK
-	HostedFiles *HostedFileSDK
-	Workflows   *WorkflowSDK
-	Tasks       *TaskSDK
-	Instance    *InstanceSDK
-	Filters     *FilterSDK
-	Users       *UserSDK
-	Plugins     *PluginSDK
-	Automate    *AutomateSDK
-	Sitemap     *SitemapSDK
-	Intercept   *InterceptSDK
+	HostedFiles  *HostedFileSDK
+	Workflows    *WorkflowSDK
+	Tasks        *TaskSDK
+	Instance     *InstanceSDK
+	Filters      *FilterSDK
+	Users        *UserSDK
+	Plugins      *PluginSDK
+	Automate     *AutomateSDK
+	Sitemap      *SitemapSDK
+	Intercept    *InterceptSDK
+	Auth         *AuthSDK
 
 	// Low-level access
 	GraphQL gql.Client
 
 	baseURL    string
 	httpClient *http.Client
-	authCfg    authConfig
+	auth       *authState
+}
+
+// authState holds mutable auth state, protected by a mutex.
+type authState struct {
+	mu           sync.RWMutex
+	pat          string
+	accessToken  string
+	refreshToken string
+	refreshFn    TokenRefreshFunc
 }
 
 // NewClient creates a new Caido client with the given options.
@@ -62,15 +77,19 @@ func NewClient(opts Options) (*Client, error) {
 		return nil, fmt.Errorf("caido: URL is required")
 	}
 
-	var auth authConfig
+	state := &authState{}
 	if opts.Auth != nil {
-		opts.Auth.apply(&auth)
+		var cfg authConfig
+		opts.Auth.apply(&cfg)
+		state.pat = cfg.pat
+		state.accessToken = cfg.accessToken
+		state.refreshToken = cfg.refreshToken
 	}
 
 	httpClient := &http.Client{
 		Transport: &authTransport{
 			base: http.DefaultTransport,
-			auth: &auth,
+			auth: state,
 		},
 	}
 
@@ -82,7 +101,7 @@ func NewClient(opts Options) (*Client, error) {
 	c := &Client{
 		baseURL:    opts.URL,
 		httpClient: httpClient,
-		authCfg:    auth,
+		auth:       state,
 		GraphQL:    gqlClient,
 	}
 
@@ -103,8 +122,48 @@ func NewClient(opts Options) (*Client, error) {
 	c.Automate = &AutomateSDK{client: c}
 	c.Sitemap = &SitemapSDK{client: c}
 	c.Intercept = &InterceptSDK{client: c}
+	c.Auth = &AuthSDK{client: c}
 
 	return c, nil
+}
+
+// SetAccessToken updates the access token used for authentication.
+// This is safe for concurrent use.
+func (c *Client) SetAccessToken(token string) {
+	c.auth.mu.Lock()
+	c.auth.accessToken = token
+	c.auth.mu.Unlock()
+}
+
+// SetRefreshToken updates the refresh token.
+// This is safe for concurrent use.
+func (c *Client) SetRefreshToken(token string) {
+	c.auth.mu.Lock()
+	c.auth.refreshToken = token
+	c.auth.mu.Unlock()
+}
+
+// RefreshToken returns the current refresh token.
+func (c *Client) RefreshToken() string {
+	c.auth.mu.RLock()
+	defer c.auth.mu.RUnlock()
+	return c.auth.refreshToken
+}
+
+// SetTokenRefresher sets a callback that is invoked before each request
+// to obtain a fresh access token. Pass nil to clear.
+func (c *Client) SetTokenRefresher(fn TokenRefreshFunc) {
+	c.auth.mu.Lock()
+	c.auth.refreshFn = fn
+	c.auth.mu.Unlock()
+}
+
+// BaseURL returns the base URL of the Caido instance.
+func (c *Client) BaseURL() string { return c.baseURL }
+
+// WebSocketEndpoint returns the WebSocket URL for GraphQL subscriptions.
+func (c *Client) WebSocketEndpoint() string {
+	return c.baseURL + "/ws"
 }
 
 // Connect verifies connectivity and authentication with the Caido instance.
@@ -114,7 +173,9 @@ func (c *Client) Connect(ctx context.Context) error {
 }
 
 // ConnectWithOptions connects with custom readiness options.
-func (c *Client) ConnectWithOptions(ctx context.Context, opts ConnectOptions) error {
+func (c *Client) ConnectWithOptions(
+	ctx context.Context, opts ConnectOptions,
+) error {
 	if opts.WaitForReady {
 		if err := c.Ready(ctx, opts); err != nil {
 			return err
@@ -135,14 +196,36 @@ func (c *Client) ConnectWithOptions(ctx context.Context, opts ConnectOptions) er
 // authTransport injects auth headers into HTTP requests.
 type authTransport struct {
 	base http.RoundTripper
-	auth *authConfig
+	auth *authState
 }
 
-func (t *authTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	if t.auth.pat != "" {
-		req.Header.Set("Authorization", "Bearer "+t.auth.pat)
-	} else if t.auth.accessToken != "" {
-		req.Header.Set("Authorization", "Bearer "+t.auth.accessToken)
+func (t *authTransport) RoundTrip(
+	req *http.Request,
+) (*http.Response, error) {
+	// If a refresh function is set, call it first.
+	t.auth.mu.RLock()
+	refreshFn := t.auth.refreshFn
+	t.auth.mu.RUnlock()
+
+	if refreshFn != nil {
+		token, err := refreshFn(req.Context())
+		if err != nil {
+			return nil, fmt.Errorf("caido: token refresh: %w", err)
+		}
+		t.auth.mu.Lock()
+		t.auth.accessToken = token
+		t.auth.mu.Unlock()
+	}
+
+	t.auth.mu.RLock()
+	pat := t.auth.pat
+	accessToken := t.auth.accessToken
+	t.auth.mu.RUnlock()
+
+	if pat != "" {
+		req.Header.Set("Authorization", "Bearer "+pat)
+	} else if accessToken != "" {
+		req.Header.Set("Authorization", "Bearer "+accessToken)
 	}
 	return t.base.RoundTrip(req)
 }

@@ -71,6 +71,45 @@ var AllAuthenticationScope = []AuthenticationScope{
 	AuthenticationScopeProfileRead,
 }
 
+type AutomateEntryRequestOrderBy string
+
+const (
+	AutomateEntryRequestOrderById                AutomateEntryRequestOrderBy = "ID"
+	AutomateEntryRequestOrderByPayload0          AutomateEntryRequestOrderBy = "PAYLOAD_0"
+	AutomateEntryRequestOrderByPayload1          AutomateEntryRequestOrderBy = "PAYLOAD_1"
+	AutomateEntryRequestOrderByPayload2          AutomateEntryRequestOrderBy = "PAYLOAD_2"
+	AutomateEntryRequestOrderByPayload3          AutomateEntryRequestOrderBy = "PAYLOAD_3"
+	AutomateEntryRequestOrderByPayload4          AutomateEntryRequestOrderBy = "PAYLOAD_4"
+	AutomateEntryRequestOrderByPosition          AutomateEntryRequestOrderBy = "POSITION"
+	AutomateEntryRequestOrderByRespLength        AutomateEntryRequestOrderBy = "RESP_LENGTH"
+	AutomateEntryRequestOrderByRespRoundtripTime AutomateEntryRequestOrderBy = "RESP_ROUNDTRIP_TIME"
+	AutomateEntryRequestOrderByRespStatusCode    AutomateEntryRequestOrderBy = "RESP_STATUS_CODE"
+)
+
+var AllAutomateEntryRequestOrderBy = []AutomateEntryRequestOrderBy{
+	AutomateEntryRequestOrderById,
+	AutomateEntryRequestOrderByPayload0,
+	AutomateEntryRequestOrderByPayload1,
+	AutomateEntryRequestOrderByPayload2,
+	AutomateEntryRequestOrderByPayload3,
+	AutomateEntryRequestOrderByPayload4,
+	AutomateEntryRequestOrderByPosition,
+	AutomateEntryRequestOrderByRespLength,
+	AutomateEntryRequestOrderByRespRoundtripTime,
+	AutomateEntryRequestOrderByRespStatusCode,
+}
+
+type AutomateEntryRequestOrderInput struct {
+	By       AutomateEntryRequestOrderBy `json:"by"`
+	Ordering Ordering                    `json:"ordering"`
+}
+
+// GetBy returns AutomateEntryRequestOrderInput.By, and is useful for accessing the field via an interface.
+func (v *AutomateEntryRequestOrderInput) GetBy() AutomateEntryRequestOrderBy { return v.By }
+
+// GetOrdering returns AutomateEntryRequestOrderInput.Ordering, and is useful for accessing the field via an interface.
+func (v *AutomateEntryRequestOrderInput) GetOrdering() Ordering { return v.Ordering }
+
 // CancelAutomateTaskCancelAutomateTaskCancelAutomateTaskPayload includes the requested fields of the GraphQL type CancelAutomateTaskPayload.
 type CancelAutomateTaskCancelAutomateTaskCancelAutomateTaskPayload struct {
 	CancelledId *string `json:"cancelledId"`
@@ -2513,6 +2552,278 @@ func (v *GetAutomateEntryAutomateEntryConnectionConnectionInfo) GetPort() int { 
 
 // GetIsTLS returns GetAutomateEntryAutomateEntryConnectionConnectionInfo.IsTLS, and is useful for accessing the field via an interface.
 func (v *GetAutomateEntryAutomateEntryConnectionConnectionInfo) GetIsTLS() bool { return v.IsTLS }
+
+// GetAutomateEntryRequestsAutomateEntry includes the requested fields of the GraphQL type AutomateEntry.
+type GetAutomateEntryRequestsAutomateEntry struct {
+	Id       string                                                                       `json:"id"`
+	Name     string                                                                       `json:"name"`
+	Requests *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnection `json:"requests"`
+}
+
+// GetId returns GetAutomateEntryRequestsAutomateEntry.Id, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntry) GetId() string { return v.Id }
+
+// GetName returns GetAutomateEntryRequestsAutomateEntry.Name, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntry) GetName() string { return v.Name }
+
+// GetRequests returns GetAutomateEntryRequestsAutomateEntry.Requests, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntry) GetRequests() *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnection {
+	return v.Requests
+}
+
+// GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnection includes the requested fields of the GraphQL type AutomateEntryRequestConnection.
+type GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnection struct {
+	// A list of edges.
+	Edges []*GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdge `json:"edges"`
+	// Information to aid in pagination.
+	PageInfo *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo `json:"pageInfo"`
+	Count    *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionCount    `json:"count"`
+}
+
+// GetEdges returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnection.Edges, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnection) GetEdges() []*GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdge {
+	return v.Edges
+}
+
+// GetPageInfo returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnection.PageInfo, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnection) GetPageInfo() *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo {
+	return v.PageInfo
+}
+
+// GetCount returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnection.Count, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnection) GetCount() *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionCount {
+	return v.Count
+}
+
+// GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionCount includes the requested fields of the GraphQL type Count.
+type GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionCount struct {
+	Value int `json:"value"`
+}
+
+// GetValue returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionCount.Value, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionCount) GetValue() int {
+	return v.Value
+}
+
+// GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdge includes the requested fields of the GraphQL type AutomateEntryRequestEdge.
+// The GraphQL type's documentation follows.
+//
+// An edge in a connection.
+type GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdge struct {
+	// A cursor for use in pagination
+	Cursor string `json:"cursor"`
+	// The item at the end of the edge
+	Node *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest `json:"node"`
+}
+
+// GetCursor returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdge.Cursor, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdge) GetCursor() string {
+	return v.Cursor
+}
+
+// GetNode returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdge.Node, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdge) GetNode() *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest {
+	return v.Node
+}
+
+// GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest includes the requested fields of the GraphQL type AutomateEntryRequest.
+type GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest struct {
+	AutomateEntryId string                                                                                                                                                                 `json:"automateEntryId"`
+	SequenceId      string                                                                                                                                                                 `json:"sequenceId"`
+	Error           *string                                                                                                                                                                `json:"error"`
+	Payloads        []*GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestPayloadsAutomateEntryRequestPayload `json:"payloads"`
+	Request         *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest                               `json:"request"`
+}
+
+// GetAutomateEntryId returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest.AutomateEntryId, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest) GetAutomateEntryId() string {
+	return v.AutomateEntryId
+}
+
+// GetSequenceId returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest.SequenceId, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest) GetSequenceId() string {
+	return v.SequenceId
+}
+
+// GetError returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest.Error, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest) GetError() *string {
+	return v.Error
+}
+
+// GetPayloads returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest.Payloads, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest) GetPayloads() []*GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestPayloadsAutomateEntryRequestPayload {
+	return v.Payloads
+}
+
+// GetRequest returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest.Request, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequest) GetRequest() *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest {
+	return v.Request
+}
+
+// GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestPayloadsAutomateEntryRequestPayload includes the requested fields of the GraphQL type AutomateEntryRequestPayload.
+type GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestPayloadsAutomateEntryRequestPayload struct {
+	Position *int    `json:"position"`
+	Raw      *string `json:"raw"`
+}
+
+// GetPosition returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestPayloadsAutomateEntryRequestPayload.Position, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestPayloadsAutomateEntryRequestPayload) GetPosition() *int {
+	return v.Position
+}
+
+// GetRaw returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestPayloadsAutomateEntryRequestPayload.Raw, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestPayloadsAutomateEntryRequestPayload) GetRaw() *string {
+	return v.Raw
+}
+
+// GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest includes the requested fields of the GraphQL type Request.
+type GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest struct {
+	Id        string                                                                                                                                           `json:"id"`
+	Host      string                                                                                                                                           `json:"host"`
+	Port      int                                                                                                                                              `json:"port"`
+	Path      string                                                                                                                                           `json:"path"`
+	Query     string                                                                                                                                           `json:"query"`
+	Method    string                                                                                                                                           `json:"method"`
+	IsTls     bool                                                                                                                                             `json:"isTls"`
+	Length    int                                                                                                                                              `json:"length"`
+	CreatedAt int64                                                                                                                                            `json:"createdAt"`
+	Source    Source                                                                                                                                           `json:"source"`
+	Response  *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse `json:"response"`
+}
+
+// GetId returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest.Id, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest) GetId() string {
+	return v.Id
+}
+
+// GetHost returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest.Host, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest) GetHost() string {
+	return v.Host
+}
+
+// GetPort returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest.Port, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest) GetPort() int {
+	return v.Port
+}
+
+// GetPath returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest.Path, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest) GetPath() string {
+	return v.Path
+}
+
+// GetQuery returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest.Query, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest) GetQuery() string {
+	return v.Query
+}
+
+// GetMethod returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest.Method, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest) GetMethod() string {
+	return v.Method
+}
+
+// GetIsTls returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest.IsTls, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest) GetIsTls() bool {
+	return v.IsTls
+}
+
+// GetLength returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest.Length, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest) GetLength() int {
+	return v.Length
+}
+
+// GetCreatedAt returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest.CreatedAt, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest) GetCreatedAt() int64 {
+	return v.CreatedAt
+}
+
+// GetSource returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest.Source, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest) GetSource() Source {
+	return v.Source
+}
+
+// GetResponse returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest.Response, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequest) GetResponse() *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse {
+	return v.Response
+}
+
+// GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse includes the requested fields of the GraphQL type Response.
+type GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse struct {
+	Id            string `json:"id"`
+	StatusCode    int    `json:"statusCode"`
+	RoundtripTime int    `json:"roundtripTime"`
+	Length        int    `json:"length"`
+	CreatedAt     int64  `json:"createdAt"`
+}
+
+// GetId returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse.Id, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse) GetId() string {
+	return v.Id
+}
+
+// GetStatusCode returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse.StatusCode, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse) GetStatusCode() int {
+	return v.StatusCode
+}
+
+// GetRoundtripTime returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse.RoundtripTime, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse) GetRoundtripTime() int {
+	return v.RoundtripTime
+}
+
+// GetLength returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse.Length, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse) GetLength() int {
+	return v.Length
+}
+
+// GetCreatedAt returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse.CreatedAt, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionEdgesAutomateEntryRequestEdgeNodeAutomateEntryRequestRequestResponse) GetCreatedAt() int64 {
+	return v.CreatedAt
+}
+
+// GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo includes the requested fields of the GraphQL type PageInfo.
+// The GraphQL type's documentation follows.
+//
+// Information about pagination in a connection
+type GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo struct {
+	// When paginating forwards, are there more items?
+	HasNextPage bool `json:"hasNextPage"`
+	// When paginating backwards, are there more items?
+	HasPreviousPage bool `json:"hasPreviousPage"`
+	// When paginating backwards, the cursor to continue.
+	StartCursor *string `json:"startCursor"`
+	// When paginating forwards, the cursor to continue.
+	EndCursor *string `json:"endCursor"`
+}
+
+// GetHasNextPage returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo.HasNextPage, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo) GetHasNextPage() bool {
+	return v.HasNextPage
+}
+
+// GetHasPreviousPage returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo.HasPreviousPage, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo) GetHasPreviousPage() bool {
+	return v.HasPreviousPage
+}
+
+// GetStartCursor returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo.StartCursor, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo) GetStartCursor() *string {
+	return v.StartCursor
+}
+
+// GetEndCursor returns GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo.EndCursor, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsAutomateEntryRequestsAutomateEntryRequestConnectionPageInfo) GetEndCursor() *string {
+	return v.EndCursor
+}
+
+// GetAutomateEntryRequestsResponse is returned by GetAutomateEntryRequests on success.
+type GetAutomateEntryRequestsResponse struct {
+	AutomateEntry *GetAutomateEntryRequestsAutomateEntry `json:"automateEntry"`
+}
+
+// GetAutomateEntry returns GetAutomateEntryRequestsResponse.AutomateEntry, and is useful for accessing the field via an interface.
+func (v *GetAutomateEntryRequestsResponse) GetAutomateEntry() *GetAutomateEntryRequestsAutomateEntry {
+	return v.AutomateEntry
+}
 
 // GetAutomateEntryResponse is returned by GetAutomateEntry on success.
 type GetAutomateEntryResponse struct {
@@ -9300,6 +9611,38 @@ type __GetAutomateEntryInput struct {
 // GetId returns __GetAutomateEntryInput.Id, and is useful for accessing the field via an interface.
 func (v *__GetAutomateEntryInput) GetId() string { return v.Id }
 
+// __GetAutomateEntryRequestsInput is used internally by genqlient
+type __GetAutomateEntryRequestsInput struct {
+	Id     string                          `json:"id"`
+	First  *int                            `json:"first"`
+	Last   *int                            `json:"last"`
+	After  *string                         `json:"after"`
+	Before *string                         `json:"before"`
+	Filter *string                         `json:"filter"`
+	Order  *AutomateEntryRequestOrderInput `json:"order,omitempty"`
+}
+
+// GetId returns __GetAutomateEntryRequestsInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetAutomateEntryRequestsInput) GetId() string { return v.Id }
+
+// GetFirst returns __GetAutomateEntryRequestsInput.First, and is useful for accessing the field via an interface.
+func (v *__GetAutomateEntryRequestsInput) GetFirst() *int { return v.First }
+
+// GetLast returns __GetAutomateEntryRequestsInput.Last, and is useful for accessing the field via an interface.
+func (v *__GetAutomateEntryRequestsInput) GetLast() *int { return v.Last }
+
+// GetAfter returns __GetAutomateEntryRequestsInput.After, and is useful for accessing the field via an interface.
+func (v *__GetAutomateEntryRequestsInput) GetAfter() *string { return v.After }
+
+// GetBefore returns __GetAutomateEntryRequestsInput.Before, and is useful for accessing the field via an interface.
+func (v *__GetAutomateEntryRequestsInput) GetBefore() *string { return v.Before }
+
+// GetFilter returns __GetAutomateEntryRequestsInput.Filter, and is useful for accessing the field via an interface.
+func (v *__GetAutomateEntryRequestsInput) GetFilter() *string { return v.Filter }
+
+// GetOrder returns __GetAutomateEntryRequestsInput.Order, and is useful for accessing the field via an interface.
+func (v *__GetAutomateEntryRequestsInput) GetOrder() *AutomateEntryRequestOrderInput { return v.Order }
+
 // __GetAutomateSessionInput is used internally by genqlient
 type __GetAutomateSessionInput struct {
 	Id string `json:"id"`
@@ -10906,6 +11249,95 @@ func GetAutomateEntry(
 	}
 
 	data_ = &GetAutomateEntryResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
+// The query executed by GetAutomateEntryRequests.
+const GetAutomateEntryRequests_Operation = `
+query GetAutomateEntryRequests ($id: ID!, $first: Int, $last: Int, $after: String, $before: String, $filter: HTTPQL, $order: AutomateEntryRequestOrderInput) {
+	automateEntry(id: $id) {
+		id
+		name
+		requests(first: $first, last: $last, after: $after, before: $before, filter: $filter, order: $order) {
+			edges {
+				cursor
+				node {
+					automateEntryId
+					sequenceId
+					error
+					payloads {
+						position
+						raw
+					}
+					request {
+						id
+						host
+						port
+						path
+						query
+						method
+						isTls
+						length
+						createdAt
+						source
+						response {
+							id
+							statusCode
+							roundtripTime
+							length
+							createdAt
+						}
+					}
+				}
+			}
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			count {
+				value
+			}
+		}
+	}
+}
+`
+
+func GetAutomateEntryRequests(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id string,
+	first *int,
+	last *int,
+	after *string,
+	before *string,
+	filter *string,
+	order *AutomateEntryRequestOrderInput,
+) (data_ *GetAutomateEntryRequestsResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "GetAutomateEntryRequests",
+		Query:  GetAutomateEntryRequests_Operation,
+		Variables: &__GetAutomateEntryRequestsInput{
+			Id:     id,
+			First:  first,
+			Last:   last,
+			After:  after,
+			Before: before,
+			Filter: filter,
+			Order:  order,
+		},
+	}
+
+	data_ = &GetAutomateEntryRequestsResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(

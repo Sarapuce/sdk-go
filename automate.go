@@ -47,6 +47,31 @@ func (s *AutomateSDK) GetEntry(
 	return gen.GetAutomateEntry(ctx, s.client.GraphQL, id)
 }
 
+// ListEntryRequestsOptions configures entry request listing.
+type ListEntryRequestsOptions struct {
+	First  *int
+	Last   *int
+	After  *string
+	Before *string
+	Filter *string
+	Order  *gen.AutomateEntryRequestOrderInput
+}
+
+// GetEntryRequests returns paginated requests for an Automate entry.
+func (s *AutomateSDK) GetEntryRequests(
+	ctx context.Context, id string,
+	opts *ListEntryRequestsOptions,
+) (*gen.GetAutomateEntryRequestsResponse, error) {
+	var o ListEntryRequestsOptions
+	if opts != nil {
+		o = *opts
+	}
+	return gen.GetAutomateEntryRequests(
+		ctx, s.client.GraphQL,
+		id, o.First, o.Last, o.After, o.Before, o.Filter, o.Order,
+	)
+}
+
 // CreateSession creates a new Automate session.
 func (s *AutomateSDK) CreateSession(
 	ctx context.Context, input *gen.CreateAutomateSessionInput,

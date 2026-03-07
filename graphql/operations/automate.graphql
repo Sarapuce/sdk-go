@@ -33,6 +33,70 @@ query GetAutomateEntry($id: ID!) {
   }
 }
 
+query GetAutomateEntryRequests(
+  $id: ID!
+  $first: Int
+  $last: Int
+  $after: String
+  $before: String
+  $filter: HTTPQL
+  $order: AutomateEntryRequestOrderInput
+) {
+  automateEntry(id: $id) {
+    id
+    name
+    requests(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      filter: $filter
+      order: $order
+    ) {
+      edges {
+        cursor
+        node {
+          automateEntryId
+          sequenceId
+          error
+          payloads {
+            position
+            raw
+          }
+          request {
+            id
+            host
+            port
+            path
+            query
+            method
+            isTls
+            length
+            createdAt
+            source
+            response {
+              id
+              statusCode
+              roundtripTime
+              length
+              createdAt
+            }
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      count {
+        value
+      }
+    }
+  }
+}
+
 query ListAutomateSessions(
   $first: Int
   $last: Int
